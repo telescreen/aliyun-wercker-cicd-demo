@@ -11,8 +11,17 @@ box: python:3.6-slim
 # This is the build pipeline. Pipelines are the core of wercker
 # Read more about pipelines on our dev center
 # http://devcenter.wercker.com/docs/pipelines/index.html
-build:
-  steps:      
+initial-build:
+  steps:
+    # Install virtualenv
+    - script:
+      name: Install virtualenv
+      code: pip install virtualenv
+
+    - virtualenv:
+      name: Setup virtualenv
+      python_location: /usr/local/bin/python
+      
     # This pip-install clears the local wheel cache
     - pip-install:
       clean_wheel_dir: true
@@ -25,10 +34,7 @@ build:
         echo "python version $(python --version) running"
         echo "pip version $(pip --version) running"
 
-test:
-  steps:
+    # Test app
     - script:
-      name: Test CICD Webapp
+      name: test app
       code: pytest
-      
-      
