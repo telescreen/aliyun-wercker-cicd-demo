@@ -12,17 +12,18 @@ box: python:3.6-slim
 # Read more about pipelines on our dev center
 # http://devcenter.wercker.com/docs/pipelines/index.html
 build:
-  steps:
+  steps:      
     # This pip-install clears the local wheel cache
     - pip-install:
+      clean_wheel_dir: true
 
     # A custom script step, name value is used in the UI
     # and the code value contains the command that get executed
     - script:
-        name: echo python information
-        code: |
-          echo "python version $(python --version) running"
-          echo "pip version $(pip --version) running"
+      name: echo python information
+      code: |
+        echo "python version $(python --version) running"
+        echo "pip version $(pip --version) running"
 
 test:
   steps:
