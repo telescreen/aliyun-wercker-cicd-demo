@@ -1,22 +1,13 @@
 box: python:3.6-slim
-# You can also use services such as databases. Read more on our dev center:
-# http://devcenter.wercker.com/docs/services/index.html
-# services:
-    # - postgres
-    # http://devcenter.wercker.com/docs/services/postgresql.html
-
-    # - mongo
-    # http://devcenter.wercker.com/docs/services/mongodb.html
-
-# This is the build pipeline. Pipelines are the core of wercker
-# Read more about pipelines on our dev center
-# http://devcenter.wercker.com/docs/pipelines/index.html
 initial-build:
   steps:
-    # Install virtualenv
+    # Install packages
     - script:
-      name: Install virtualenv
-      code: pip install virtualenv
+      name: Install packages
+      code: |
+        pip install virtualenv
+        apt update
+        apt install -y curl 
 
     - virtualenv:
       name: Setup virtualenv
@@ -38,3 +29,9 @@ initial-build:
     - script:
       name: test app
       code: pytest
+
+  after-steps:
+    - slack-notifier:
+      channel: $SLACK_CHANNEL
+      url: $SLACK_URL
+      username: cicdbot
