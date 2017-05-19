@@ -11,9 +11,12 @@ class CICDTest(unittest.TestCase):
     def tearDown(self):
         pass
 
-    def test_index(self):
-        rv = self.app.get('/')
+    def test_hello(self):
+        rv = self.app.get('/hello')
         assert b'Hello world' in rv.data
+
+    def test_index(self):
+        pass
 
 if __name__ == '__main__':
     unittest.main()

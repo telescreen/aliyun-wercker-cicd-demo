@@ -1,25 +1,15 @@
 box: python:3.6-slim
-# You can also use services such as databases. Read more on our dev center:
-# http://devcenter.wercker.com/docs/services/index.html
-# services:
-    # - postgres
-    # http://devcenter.wercker.com/docs/services/postgresql.html
-
-    # - mongo
-    # http://devcenter.wercker.com/docs/services/mongodb.html
-
-# This is the build pipeline. Pipelines are the core of wercker
-# Read more about pipelines on our dev center
-# http://devcenter.wercker.com/docs/pipelines/index.html
-build:
+initial-build:
   steps:
-    # Install virtualenv
+    # Install packages
     - script:
-      name: Install virtualenv
-      code: pip install virtualenv
-    # Use this virtualenv step for python 3.6
+      name: Install packages
+      code: |
+        pip install virtualenv
+        apt update
+        apt install -y curl 
     - virtualenv:
-      name: setup virtual environment
+      name: Setup virtualenv
       python_location: /usr/local/bin/python
       
     # This pip-install clears the local wheel cache
@@ -33,11 +23,13 @@ build:
       code: |
         echo "python version $(python --version) running"
         echo "pip version $(pip --version) running"
-
-test:
-  steps:
+    # Test app
     - script:
-      name: Test CICD Webapp
+      name: test app
       code: pytest
-      
-      
+
+  after-steps:
+    - slack-notifier:
+      channel: $SLACK_CHANNEL
+      url: $SLACK_URL
+      username: cicdbot
