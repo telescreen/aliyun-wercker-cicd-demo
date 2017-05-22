@@ -33,3 +33,25 @@ initial-build:
       channel: $SLACK_CHANNEL
       url: $SLACK_URL
       username: cicdbot
+
+create-aliyun-image:
+  steps:
+    - script:
+      name: Install aliyuncli
+      code: |
+        pip install aliyuncli
+        pip install aliyun-python-sdk-slb aliyun-python-sdk-ecs
+        pip install aliyun-python-sdk-rds aliyun-python-sdk-oss aliyun-python-sdk-r-kvstore
+        pip install aliyun-python-sdk-sts aliyun-python-sdk-ess
+
+deploy-staging:
+  steps:
+    - add-to-known_hosts:
+      hostname: 47.74.11.150
+      fingerprint: SHA256:3fCsEHjYaYKbvMT1Pei/PIKneoCnNx4WKRvwrEOZX+E.
+    - add-ssh-key:
+      keyname: $BITBUCKET_PRIVATEKEY
+    - script:
+      name: Clone and Update repository
+      script:
+        ssh -t tal@47.74.11.150 'git clone git@bitbucket.org:talzeus/cicddemo.git cicdapp'
