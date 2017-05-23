@@ -1,0 +1,13 @@
+[Unit]
+Description = uWSGI instance for CICDDemo
+After = network.target
+
+[Service]
+User = tal
+Group = tal
+WorkingDirectory=/home/tal/cicddemo
+Environment="PATH=/home/tal/cicddemo/env/bin"
+ExecStart=/home/tal/cicddemo/env/bin/uwsgi --ini cicd.ini
+
+[Install]
+WantedBy=multi-user.target
