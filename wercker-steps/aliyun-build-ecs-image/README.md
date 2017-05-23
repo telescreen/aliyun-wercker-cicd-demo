@@ -1,1 +1,0 @@
-werckerのaliyuncliコマンドを実行するステップの実験です

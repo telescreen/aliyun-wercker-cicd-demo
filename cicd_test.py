@@ -11,12 +11,13 @@ class CICDTest(unittest.TestCase):
     def tearDown(self):
         pass
 
-    def test_hello(self):
-        rv = self.app.get('/hello')
-        assert b'Hello world' in rv.data
-
     def test_index(self):
-        pass
+        rv = self.app.get('/')
+        assert rv.status_code == 200
+
+    def test_model_data(self):
+        rv = cicd.model_data()
+        assert len(rv) == 3
 
 if __name__ == '__main__':
     unittest.main()

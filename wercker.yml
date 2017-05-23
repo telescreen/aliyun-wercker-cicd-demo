@@ -1,31 +1,19 @@
-box: python:3.6-slim
 initial-build:
+  box: python:3.6-slim
   steps:
-    # Install packages
+    - install-packages:
+      name: Install Packages
+      packages: build-essential curl
     - script:
-      name: Install packages
-      code: |
-        pip install virtualenv
-        apt update
-        apt install -y build-essential
+      name: Install virtualenv
+      code: pip install virtualenv
     - virtualenv:
       name: Setup virtualenv
       python_location: /usr/local/bin/python
-
-    # This pip-install clears the local wheel cache
     - pip-install:
       clean_wheel_dir: true
-
-    # A custom script step, name value is used in the UI
-    # and the code value contains the command that get executed
     - script:
-      name: echo python information
-      code: |
-        echo "python version $(python --version) running"
-        echo "pip version $(pip --version) running"
-    # Test app
-    - script:
-      name: test app
+      name: Test CICD App
       code: pytest
 
   after-steps:
@@ -35,43 +23,64 @@ initial-build:
       username: cicdbot
 
 deploy-staging:
+  box: ubuntu
   steps:
-    - script:
+    - install-packages:
       name: Install ssh
-      code: |
-        apt update
-        apt install -y ssh
-    - add-to-known_hosts:
-      hostname: 47.74.11.150
-      fingerprint: cb:60:eb:56:00:e4:1c:55:0f:03:e3:a5:36:63:2e:c8
-      type: rsa
+      packages: openssh-server openssh-client curl
     - add-ssh-key:
       keyname: PKEY
+    - add-to-known_hosts:
+      hostname: $STAGING_SERVER_IP
+      fingerprint: $STAGING_SERVER_FINGERPRINT
+      type: rsa
     - script:
-      name: Install packages
+      name: Install/Update CICD app
       code: |
-        ssh -tt tal@47.74.11.150 << EOF
+        ssh -tt tal@${STAGING_SERVER_IP} << EOF
+           sudo yum groupinstall -y "development tools"
+           sudo yum install -y git python-devel
            if [ -d "cicddemo" ]; then
-               cd cicddemo && git pull
+               cd cicddemo
+               git config user.email "cicdapp@local"
+               git config user.name "cicdapp"
+               git pull
+               cd cicddemo && source ./env/bin/activate && pip install -r requirements.txt
+               sudo systemctl restart cicd
            else
-               git clone -b prerelease git@bitbucket.org:talzeus/cicddemo.git cicddemo
+               git clone https://github.com/telescreen/aliyun-wercker-cicd-demo.git cicddemo
+               cd cicddemo
+               sudo pip install virtualenv
+               virtualenv --distribute env               
+               source ./env/bin/activate && pip install -r requirements.txt
+               sudo cp ./cicd.service /etc/systemd/system
+               git pull
+               sudo systemctl enable cicd
+               sudo systemctl start cicd
            fi
            exit 0;
         EOF
-        ssh -tt tal@47.74.11.150 'cd cicddemo && git pull'        
-        ssh -tt tal@47.74.11.150 'sudo pip install virtualenv'
-        ssh -tt tal@47.74.11.150 'cd cicddemo && virtualenv --distribute env'
-        ssh -tt tal@47.74.11.150 'cd cicddemo && source ./env/bin/activate && pip install -r requirements.txt'
-        ssh -tt tal@47.74.11.150 'cd cicddemo && sudo cp ./cicd.service /etc/systemd/system'
-        ssh -tt tal@47.74.11.150 'sudo systemctl start cicd'
-        ssh -tt tal@47.74.11.150 'sudo systemctl enable cicd'
+  after-steps:
+    - slack-notifier:
+      channel: $SLACK_CHANNEL
+      url: $SLACK_URL
+      username: cicdbot
 
 prepare-production-image:
+  box: python:2-slim
   steps:
-    - aliyun-build-ecs-image:
+    - install-packages:
+      name: Install curl
+      packages: curl    
+    - telescreen/aliyun-build-ecs-image@0.1.1:
       name: Build ECS Image
       access_key_id: $ACCESS_KEY_ID
       access_key_secret: $ACCESS_KEY_SECRET
       instance_id: $INSTANCE_ID
       region_id: $REGION_ID
       image_name: ha-cicd-image
+  after-steps:
+    - slack-notifier:
+      channel: $SLACK_CHANNEL
+      url: $SLACK_URL
+      username: cicdbot
