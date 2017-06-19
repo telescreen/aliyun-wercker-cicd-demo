@@ -23,7 +23,7 @@ class CICDTest(unittest.TestCase):
         テストケース2: モデルのデータサイズは2でなければならない
         """
         rv = cicd.model_data()
-        assert len(rv) == 1
+        assert len(rv) == 2
 
     #def test_newlayout(self):
     #    """
