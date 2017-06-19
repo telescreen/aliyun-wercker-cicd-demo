@@ -14,7 +14,7 @@ def newlayout():
 def model_data():
     return [
         { "text": "Hello world" },
-        { "text": "From SBCloud!" },
+        { "text": "From Softbank-AlibabaCloud!" },
         { "text": "Hello again!" }
     ]
 
