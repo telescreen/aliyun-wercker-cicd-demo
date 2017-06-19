@@ -6,10 +6,10 @@ def index():
     entries = model_data()
     return render_template("index.html", entries=entries)
 
-#@app.route("/newlayout")
-#def newlayout():
-#    entries = model_data()
-#    return render_template("newlayout.html", entries=entries)
+@app.route("/newlayout")
+def newlayout():
+    entries = model_data()
+    return render_template("newlayout.html", entries=entries)
 
 def model_data():
     return [

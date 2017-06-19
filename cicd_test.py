@@ -25,15 +25,15 @@ class CICDTest(unittest.TestCase):
         rv = cicd.model_data()
         assert len(rv) == 3
 
-    #def test_newlayout(self):
-    #    """
-    #    テストケース3:
-    #     + newlayoutへアクセスが正常でなければならない
-    #     + SBCloud という文字を含まなければならない
-    #    """
-    #    rv = self.app.get('/')
-    #    assert rv.status_code == 200
-    #    assert b"SBCloud!" in rv.data
+    def test_newlayout(self):
+        """
+        テストケース3:
+         + newlayoutへアクセスが正常でなければならない
+         + SBCloud という文字を含まなければならない
+        """
+        rv = self.app.get('/newlayout')
+        assert rv.status_code == 200
+        assert b"SBCloud!" in rv.data
 
 if __name__ == '__main__':
     unittest.main()
