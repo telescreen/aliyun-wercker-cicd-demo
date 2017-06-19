@@ -23,7 +23,7 @@ class CICDTest(unittest.TestCase):
         テストケース2: モデルのデータサイズは2でなければならない
         """
         rv = cicd.model_data()
-        assert len(rv) == 2
+        assert len(rv) == 3
 
     #def test_newlayout(self):
     #    """
@@ -37,3 +37,6 @@ class CICDTest(unittest.TestCase):
 
 if __name__ == '__main__':
     unittest.main()
+
+# pytest -v -k "test_model_data, test_index"
+# pytest -v -k "test_model_data, test_newlayout"

@@ -14,7 +14,8 @@ def index():
 def model_data():
     return [
         { "text": "Hello world" },
-        { "text": "From SBCloud!" }
+        { "text": "From SBCloud!" },
+        { "text": "Hello again!" }
     ]
 
 if __name__ == "__main__":
