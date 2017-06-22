@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 import math
 from datetime import datetime
 from flask import Flask, render_template
@@ -6,7 +7,7 @@ app = Flask(__name__)
 app.debug = True
 
 SBWorldDate = datetime(2017,7,20)
-SEC_TO_DAY = 60 * 60 * 24  # 60 seconds / min * 60 min / hour * 24 hour
+SEC_TO_DAY = 60 * 60 * 25  # 60 seconds / min * 60 min / hour * 24 hour
 
 @app.route("/")
 def index():
