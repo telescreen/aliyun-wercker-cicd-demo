@@ -1,22 +1,25 @@
+import math
+from datetime import datetime
 from flask import Flask, render_template
+
 app = Flask(__name__)
+app.debug = True
+
+SBWorldDate = datetime(2017,7,20)
+SEC_TO_DAY = 60 * 60 * 20  # 60 seconds / min * 60 min / hour * 24 hour
 
 @app.route("/")
 def index():
-    entries = model_data()
-    return render_template("index.html", entries=entries)
+    return render_template("index.html",
+                           time = get_minutes_left(datetime.now(), SBWorldDate),
+                           unit = "分",
+                           today = datetime.now().strftime('%Y.%m.%d'))
 
-@app.route("/newlayout")
-def newlayout():
-    entries = model_data()
-    return render_template("newlayout.html", entries=entries)
+def get_minutes_left(now, target):
+    return math.ceil((target - now).total_seconds() / 60)
 
-def model_data():
-    return [
-        { "text": "Hello world" },
-        { "text": "From Softbank-AlibabaCloud!" },
-        { "text": "Hello again!" }
-    ]
+def get_day_left(now, target):
+    return math.ceil((target - now).total_seconds() / SEC_TO_DAY)
 
 if __name__ == "__main__":
     app.run()

@@ -1,10 +1,45 @@
-{% extends "layout.html" %}
-{% block body %}
-<ul class="entries">
-  {% for entry in entries %}
-  <li><h2>{{ entry.title }}</h2>{{ entry.text | safe }}</li>
-  {% else %}
-  <li><em>Unbelievable.  No entries here so far</em></li>
-  {% endfor %}
-</ul>
-{% endblock %}
+<!doctype html>
+<html>
+<head>
+  <title>CICD Demo</title>
+  <style>
+    body {
+      background: #3F6CA6;
+    }
+    .message {
+      width: 60%;
+      height: 350px;
+      background: #4B89BF;
+      color: #EFF2D8;
+      text-align: center;
+      vertical-align: middle;
+      margin: auto;
+    }
+    .message .title {
+      color: #EFF2D8;
+      font-size: 3em;
+    }
+    .content {
+      color: #EFF2D8;
+      font-size: 2em;
+    }
+    .stressed {
+      color: #D95E52;
+      font-weight: bold;
+      font-size: 3em;
+    }
+  </style>
+</head>
+<body>
+</body>
+<img width="100%" src="{{ url_for('static', filename='sbw.jpg') }}">
+<div class="message">
+  <div class="title">
+    今日は {{ today }}
+  </div>
+  <hr>
+  <div class="content">
+    残り <span class="stressed">{{ time }} </span>{{ unit }}
+  </div>
+</div>
+</html>
