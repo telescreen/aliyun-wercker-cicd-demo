@@ -12,15 +12,15 @@ SEC_TO_DAY = 60 * 60 * 24  # 60 seconds / min * 60 min / hour * 24 hour
 @app.route("/")
 def index():
     return render_template("index.html",
-                           time = get_day_left(datetime.now(), SBWorldDate),
+                           time = get__left(datetime.now(), SBWorldDate),
                            unit = u"日",
                            today = datetime.now().strftime('%Y.%m.%d'))
 
 def get_minutes_left(now, target):
-    return math.ceil((target - now).total_seconds() / 60)
+    return int(math.ceil((target - now).total_seconds() / 60))
 
 def get_day_left(now, target):
-    return math.ceil((target - now).total_seconds() / SEC_TO_DAY)
+    return int(math.ceil((target - now).total_seconds() / SEC_TO_DAY))
 
 if __name__ == "__main__":
     app.run()
