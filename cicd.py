@@ -7,7 +7,7 @@ app = Flask(__name__)
 app.debug = True
 
 SBWorldDate = datetime(2017,7,20)
-SEC_TO_DAY = 60 * 60 * 20  # 60 seconds / min * 60 min / hour * 24 hour
+SEC_TO_DAY = 60 * 60 * 24  # 60 seconds / min * 60 min / hour * 24 hour
 
 @app.route("/")
 def index():
