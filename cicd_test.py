@@ -13,7 +13,8 @@ class CICDTest(unittest.TestCase):
     def test_get_day_left(self):
         now = datetime(2017,7,10,12,0,10)
         target = datetime(2017,7,20,0,0,0)
-        assert cicd.get_day_left(now, target) == 10
+        time, _ = cicd.get_day_left(now, target)
+        assert time == 10
 
 if __name__ == '__main__':
     unittest.main()
