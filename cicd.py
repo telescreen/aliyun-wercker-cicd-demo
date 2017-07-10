@@ -12,7 +12,7 @@ SEC_TO_DAY = 60 * 60 * 24  # 60 seconds / min * 60 min / hour * 24 hour
 @app.route("/")
 def index():
     return render_template("index.html",
-                           time = get_day_left(datetime.now(), SBWorldDate),
+                           time = get_minutes_left(datetime.now(), SBWorldDate),
                            unit = u"日",
                            today = datetime.now().strftime('%Y.%m.%d'))
 
