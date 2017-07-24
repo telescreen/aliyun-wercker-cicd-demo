@@ -6,12 +6,12 @@ from flask import Flask, render_template
 app = Flask(__name__)
 app.debug = True
 
-SBWorldDate = datetime(2017,7,20)
+EventDate = datetime(2017,8,10)
 SEC_TO_DAY = 60 * 60 * 24  # 60 seconds / min * 60 min / hour * 24 hour
 
 @app.route("/")
 def index():
-    time, unit = get_day_left(datetime.now(), SBWorldDate)
+    time, unit = get_day_left(datetime.now(), EventDate)
     return render_template("index.html",
                            time = time, unit = unit,
                            today = datetime.now().strftime('%Y.%m.%d'))
