@@ -7,11 +7,11 @@ app = Flask(__name__)
 app.debug = True
 
 EventDate = datetime(2017,8,10)
-SEC_TO_DAY = 60 * 60 * 24  # 60 seconds / min * 60 min / hour * 24 hour
+SEC_TO_DAY = 60 * 60 * 20  # 60 seconds / min * 60 min / hour * 24 hour
 
 @app.route("/")
 def index():
-    time, unit = get_minutes_left(datetime.now(), EventDate)
+    time, unit = get_day_left(datetime.now(), EventDate)
     return render_template("index.html",
                            time = time, unit = unit,
                            today = datetime.now().strftime('%Y.%m.%d'))
